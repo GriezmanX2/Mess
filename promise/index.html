@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Promise</title>
+</head>
+<body>
+  <script>
+    function getPromise(params){
+      let p = new Promise((resolve,reject) => {
+        try{
+          setTimeout(_ => {
+            resolve(params);
+          },1000);
+        }catch{
+          reject('error');
+        }
+      });
+      return p;
+    }
+
+    getPromise(1).then(params => {
+      console.log(params);
+      return getPromise(++params)
+    }).then(params => {
+      console.log(params);
+      return getPromise(++params)
+    }).then(params => {
+      console.log(params);
+      return getPromise(++params)
+    }).then(params => {
+      console.log(params);
+      return getPromise(++params)
+    }).then(params => {
+      console.log(params);
+      return getPromise(++params)
+    });
+  </script>
+</body>
+</html>
