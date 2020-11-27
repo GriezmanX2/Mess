@@ -321,10 +321,85 @@ for (let i = 1; i <= 5; i++) {
   }
   test()
   ```
-  + lodash 的深拷贝函数
++ lodash 的深拷贝函数
 
-  ## 原型
-  + 可以通过非标准属性__proto__来获取
-  + 推荐使用Object.getPrototypeOf()或Reflect.getPrototypeOf(),因为非标准属性意味着未来可能会修改或移出该属性
-  +
+## 原型
++ 可以通过非标准属性__proto__来获取
++ 推荐使用Object.getPrototypeOf()或Reflect.getPrototypeOf(),因为非标准属性意味着未来可能会修改或移出该属性
++
+
+## var、let、const
+```js
+console.log(a) // undefined
+var a = 1
+
+var a
+console.log(a) // undefined
+a = 1
+```
+从上述代码中可以发现，虽然变量还没有被声明，但我们却可以使用这个未声明的变量，这种情况就叫做提升(hoisting)，提升的是变量的声明。以上两端代码等效。
+
+其实不仅var声明的变量会发生提升，函数也会被提升，并且优先于变量提升。
+```js
+console.log(a) // ƒ a() {}
+function a() {}
+var a = 1
+```
+
+另外var声明的变量会作为属性挂载到window上，let、const不会。并且let、const会产生暂时性死区，以至于声明的变量不能在声明前使用。
+
+## 模块化
+  使用模块化可以给我们带来以下好处
+  + 解决命名冲突
+  + 提供复用性
+  + 提高代码可维护性
+
+  > 立即执行函数
+
+  在早期，使用立即执行函数实现模块化是常见的手段，通过函数作用域解决了命名冲突、污染全局作用域的问题。
+    
+  ```js
+  (function(globalVariable){
+    globalVariable.test = function() {}
+    // ... 声明各种变量、函数都不会污染全局作用域
+  })(globalVariable)
+  ```
+
+  > AMD和CMD
   
+  鉴于目前这两种实现方式已经很少见到，所以不再对具体特性细聊，只需要了解这两者是如何使用的。
+
+  ```js
+  // AMD
+  define(['./a','./b'],function(a,b){
+    // 加载模块完毕可以使用
+    a.do();
+    b.do();
+  });
+
+  // CMD
+  define(function(require,exports,module){
+    // 加载模块
+    // 可以把require卸载函数体的任意地方实现延迟加载
+    var a = require('./a');
+    a.do();
+  });
+  ```
+  > CommonJS
+
+  CommonJS最早是在Node中使用，目前也仍然广泛使用，比如在Webpack中你就能见到它，当然目前在Node中的模块管理已经和CommonJS有一些区别了。
+
+  ```js
+  // a.js
+  module.exports = {
+    a: 1
+  };
+
+  // or
+  exports.a = 1;
+
+  // b.js
+  var module = require('./a.js');
+  module.a // -> 1
+  ```
+
